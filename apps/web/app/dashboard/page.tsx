@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase/client"
 import { AppSidebar } from "@/components/app-sidebar"
+import { Button } from "@workspace/ui/components/button"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,6 +23,11 @@ import {
 export default function Page() {
   const router = useRouter()
   const [checking, setChecking] = useState(true)
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.replace("/login")
+  }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -74,6 +80,9 @@ export default function Page() {
             <div className="bg-muted/50 aspect-video rounded-xl" />
           </div>
           <div className="bg-muted/50 min-h-screen flex-1 rounded-xl md:min-h-min" />
+          <div>
+            <Button variant="outline" onClick={handleLogout}>Logout</Button>
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
